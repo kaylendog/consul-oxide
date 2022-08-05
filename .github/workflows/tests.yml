@@ -1,6 +1,7 @@
 name: Tests
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -20,15 +21,15 @@ jobs:
         uses: actions/checkout@v2
       - name: Set up environment cache
         uses: Swatinem/rust-cache@v2
+      - name: Setup Consul Agent for tests
+        run: |
+          curl -L -o /tmp/consul.zip https://releases.hashicorp.com/consul/1.12.3/consul_1.12.3_linux_amd64.zip
+          unzip /tmp/consul.zip
+          ./consul agent -dev -server -bind=127.0.0.1 > /tmp/consul.log &
       - name: Generate code coverage
         run: |
-          cargo tarpaulin --verbose --all-features --workspace --timeout 120 --out Xml
+          cargo tarpaulin --verbose --all-features --workspace --timeout 120 --out Xml -- --test-threads=1
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v2
         with:
           fail_ci_if_error: true
-    services:
-      consul:
-        image: consul
-        ports: 
-          - 8500:8500
