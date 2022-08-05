@@ -3,7 +3,7 @@ use serde_json::Value;
 
 use crate::{sealed::Sealed, Client, ConsulResult, QueryOptions};
 
-/// This trait provides the ability to interact with the Secure Session API.
+/// Response payload for the [ConnectCA::get_ca_config] method.
 #[derive(Default, Serialize, Deserialize, Debug)]
 #[serde(default)]
 #[allow(clippy::upper_case_acronyms)]
@@ -18,6 +18,7 @@ pub struct CAConfig {
     modify_index: u64,
 }
 
+/// Response payload for the [ConnectCA::list_ca_root_certs] method.
 #[derive(Default, Serialize, Deserialize, Debug)]
 #[serde(default)]
 #[allow(clippy::upper_case_acronyms)]
@@ -30,6 +31,8 @@ pub struct CARootList {
     roots: Vec<CARoot>,
 }
 
+/// Entry in the root certificate list. Returned by the
+/// [ConnectCA::list_ca_root_certs] method.
 #[derive(Eq, Default, PartialEq, Serialize, Deserialize, Debug)]
 #[serde(default)]
 #[allow(clippy::upper_case_acronyms)]

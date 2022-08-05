@@ -5,10 +5,12 @@ use reqwest::Method;
 
 use crate::{sealed::Sealed, Client, ConsulError, ConsulResult, QueryOptions};
 
+/// A key-value pair within the Consul KV store.
 #[derive(Clone, Default, Eq, PartialEq, Serialize, Deserialize, Debug)]
 #[serde(default)]
 #[allow(clippy::upper_case_acronyms)]
 pub struct KVPair {
+    /// The key of the key-value pair.
     #[serde(rename = "Key")]
     pub key: String,
     #[serde(rename = "CreateIndex")]
@@ -19,6 +21,7 @@ pub struct KVPair {
     pub lockindex: Option<u64>,
     #[serde(rename = "Flags")]
     pub flags: Option<u64>,
+    /// The value of the key-value pair.
     #[serde(rename = "Value")]
     pub value: String,
     #[serde(rename = "Session")]

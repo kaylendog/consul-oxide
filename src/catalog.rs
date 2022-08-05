@@ -9,25 +9,20 @@ use crate::{
 
 /// A node within the cluster gossip pool.
 #[derive(Eq, Default, PartialEq, Serialize, Deserialize, Debug)]
-#[serde(default)]
+#[serde(default, rename_all = "PascalCase")]
 pub struct Node {
     /// The ID of the node.
     #[serde(rename = "ID")]
     id: String,
     /// The name of the node.
-    #[serde(rename = "Node")]
     node: String,
     /// The address of the node.
-    #[serde(rename = "Address")]
     address: String,
     /// The datacenter of the node.
-    #[serde(rename = "Datacenter")]
     datacenter: String,
     /// The tags of the node.
-    #[serde(rename = "TaggedAddresses")]
     tagged_addresses: HashMap<String, String>,
     /// The meta data of the node.
-    #[serde(rename = "Meta")]
     meta: HashMap<String, String>,
     create_index: u64,
     modify_index: u64,
@@ -35,63 +30,47 @@ pub struct Node {
 
 /// A service defined within the Agent catalog.
 #[derive(Eq, Default, PartialEq, Serialize, Deserialize, Debug)]
-#[serde(default)]
+#[serde(default, rename_all = "PascalCase")]
 pub struct CatalogService {
     /// The ID of the service.
     #[serde(rename = "ID")]
     id: String,
     /// The node the service is associated with.
-    #[serde(rename = "Node")]
     node: String,
     /// The address of the node.
-    #[serde(rename = "Address")]
     address: String,
     /// The datacenter of the node running the service.
-    #[serde(rename = "Datacenter")]
     datacenter: String,
     /// A map of addresses tagged to the node hosting the service.
-    #[serde(rename = "TaggedAddresses")]
     tagged_addresses: HashMap<String, String>,
     /// Metadata attached to the node this service is hosted on.
-    #[serde(rename = "NodeMeta")]
     node_meta: HashMap<String, String>,
     /// The ID of the service.
     #[serde(rename = "ServiceID")]
     service_id: String,
     /// The name of the service.
-    #[serde(rename = "ServiceName")]
     service_name: String,
     /// The address of the service.
-    #[serde(rename = "ServiceAddress")]
     service_address: String,
     /// Tags assigned to the service.
-    #[serde(rename = "ServiceTags")]
     service_tags: Vec<String>,
     /// Metadata assigned to the service.
-    #[serde(rename = "ServiceMeta")]
     service_meta: HashMap<String, String>,
     /// The port of the service.
-    #[serde(rename = "ServicePort")]
     service_port: u32,
-    #[serde(rename = "ServiceWeights")]
     service_weights: ServiceWeights,
-    #[serde(rename = "ServiceEnableTagOverride")]
     service_enable_tag_override: bool,
-    #[serde(rename = "CreateIndex")]
     create_index: u64,
-    #[serde(rename = "ModifyIndex")]
     modify_index: u64,
 }
 
 /// A response datatype containing a [Node] and its services.
 #[derive(Eq, Default, PartialEq, Serialize, Deserialize, Debug)]
-#[serde(default)]
+#[serde(default, rename_all = "PascalCase")]
 pub struct CatalogNode {
     /// The node stored in the catalog.
-    #[serde(rename = "Node")]
     node: Option<Node>,
     /// The services associated with the node.
-    #[serde(rename = "Services")]
     services: HashMap<String, AgentService>,
 }
 
@@ -99,55 +78,44 @@ pub struct CatalogNode {
 ///
 /// For more information, see the [API documentation](https://www.consul.io/api-docs/catalog#json-request-body-schema).
 #[derive(Eq, Default, PartialEq, Serialize, Deserialize, Debug)]
-#[serde(default)]
+#[serde(default, rename_all = "PascalCase")]
 pub struct CatalogRegistrationPayload {
     /// An optional UUID to assign to the node. This must be a 36-character
     /// UUID-formatted string.
     #[serde(rename = "Node")]
     id: String,
     /// Specifies the node ID to register.
-    #[serde(rename = "Address")]
     node: String,
     /// Specifies the address to register.
-    #[serde(rename = "Datacenter")]
     address: String,
     /// Specifies the tagged addresses.
-    #[serde(rename = "TaggedAddresses")]
     tagged_addresses: HashMap<String, String>,
     /// Specifies arbitrary KV metadata pairs for filtering purposes.
-    #[serde(rename = "NodeMeta")]
     node_meta: HashMap<String, String>,
     /// Specifies the datacenter, which defaults to the agent's datacenter if
     /// not provided.
-    #[serde(rename = "Datacenter")]
     datacenter: String,
     /// Specifies to register a service. If `id` is not provided, it will be
     /// defaulted to the value of the Service.Service property. Only one service
     /// with a given ID may be present per node.
-    #[serde(rename = "Service")]
     service: Option<AgentService>,
     /// Specifies to register a check.
-    #[serde(rename = "Check")]
     check: Option<AgentCheck>,
     /// Specifies whether to skip updating the node's information in the
     /// registration.
-    #[serde(rename = "SkipNodeUpdate")]
     skip_node_update: bool,
 }
 
 /// Request payload datatype for the [crate::Catalog::deregister] method.
 #[derive(Eq, Default, PartialEq, Serialize, Deserialize, Debug)]
-#[serde(default)]
+#[serde(default, rename_all = "PascalCase")]
 pub struct CatalogDeregistrationPayload {
     /// Specifies the node ID to deregister.
-    #[serde(rename = "Node")]
     node: String,
     /// The address of the node.
-    #[serde(rename = "Address")]
     address: String,
     /// Specifies the datacenter, which defaults to the agent's datacenter if
     /// not provided.
-    #[serde(rename = "Datacenter")]
     datacenter: String,
     /// Specifies the service ID to deregister.
     #[serde(rename = "ServiceID")]

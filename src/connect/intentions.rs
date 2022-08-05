@@ -144,7 +144,7 @@ pub struct CreateIntentionPayload {
     pub meta: HashMap<String, String>,
 }
 
-/// Response payload for the [ConnectIntentions::read_intention_by_name]
+/// Response payload for the [ConnectIntentions::read_intention_by_name].
 #[derive(Debug, Deserialize)]
 pub struct ReadIntentionByNameResponse {
     #[serde(rename = "Description")]

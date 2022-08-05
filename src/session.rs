@@ -4,30 +4,22 @@ use crate::{sealed::Sealed, Client, ConsulResult, QueryOptions};
 
 #[derive(Clone, Default, Eq, PartialEq, Serialize, Deserialize, Debug)]
 #[serde(default)]
-#[allow(clippy::upper_case_acronyms)]
 pub struct SessionID {
     #[serde(rename = "ID")]
     pub id: String,
 }
 
 #[derive(Clone, Default, Eq, PartialEq, Serialize, Deserialize, Debug)]
-#[serde(default)]
+#[serde(default, rename_all = "PascalCase")]
 pub struct SessionEntry {
-    #[serde(rename = "CreateIndex")]
     pub createindex: Option<u64>,
     #[serde(rename = "ID")]
     pub id: Option<String>,
-    #[serde(rename = "Name")]
     pub name: Option<String>,
-    #[serde(rename = "Node")]
     pub node: Option<String>,
-    #[serde(rename = "LockDelay")]
     pub lockdelay: Option<u64>, //delay: Change this to a Durations
-    #[serde(rename = "Behavior")]
     pub behavior: Option<String>,
-    #[serde(rename = "Checks")]
     pub checks: Option<Vec<String>>,
-    #[serde(rename = "TTL")]
     pub ttl: Option<String>,
 }
 
