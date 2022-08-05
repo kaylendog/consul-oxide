@@ -49,7 +49,7 @@ Simply include the consul-oxide in your Cargo dependencies.
 
 ```toml
 [dependencies]
-consul = "0.5"
+consul_oxide = "0.5"
 ```
 
 ## Async Support
