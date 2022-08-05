@@ -190,10 +190,12 @@ pub trait Agent: Sealed {
 
 #[async_trait]
 impl Agent for Client {
+    #[tracing::instrument]
     async fn list_checks(&self) -> ConsulResult<HashMap<String, AgentCheck>> {
         self.get("/v1/agent/checks", None).await
     }
 
+    #[tracing::instrument]
     async fn list_members(&self, wan: bool) -> ConsulResult<AgentMember> {
         let mut params = HashMap::new();
         if wan {
@@ -202,10 +204,12 @@ impl Agent for Client {
         self.get("/v1/agent/members", None).await
     }
 
+    #[tracing::instrument]
     async fn reload_agent(&self) -> ConsulResult<()> {
         self.put("/v1/agent/reload", (), None, None).await
     }
 
+    #[tracing::instrument]
     async fn enable_maintenance_mode(
         &self,
         enable: bool,
@@ -220,6 +224,7 @@ impl Agent for Client {
         self.put("/v1/agent/maintenance", (), Some(params), None).await
     }
 
+    #[tracing::instrument]
     async fn join_cluster(&self, address: &str, wan: bool) -> ConsulResult<()> {
         let mut params = HashMap::new();
 
@@ -230,10 +235,12 @@ impl Agent for Client {
         self.put(&path, (), Some(params), None).await
     }
 
+    #[tracing::instrument]
     async fn leave_cluster(&self) -> ConsulResult<()> {
         self.put("/v1/agent/leave", (), None, None).await
     }
 
+    #[tracing::instrument]
     async fn force_leave_cluster(&self) -> ConsulResult<()> {
         self.put("/v1/agent/force-leave", (), None, None).await
     }

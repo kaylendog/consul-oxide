@@ -210,6 +210,7 @@ pub trait Catalog: Sealed {
 
 #[async_trait]
 impl Catalog for Client {
+    #[tracing::instrument]
     async fn register(
         &self,
         payload: CatalogRegistrationPayload,
@@ -218,6 +219,7 @@ impl Catalog for Client {
         self.put("/v1/session/create", payload, None, options).await
     }
 
+    #[tracing::instrument]
     async fn deregister(
         &self,
         payload: CatalogDeregistrationPayload,
@@ -226,10 +228,12 @@ impl Catalog for Client {
         self.put("/v1/catalog/deregister", payload, None, options).await
     }
 
+    #[tracing::instrument]
     async fn list_datacenters(&self) -> ConsulResult<Vec<String>> {
         self.get("/v1/catalog/datacenters", None).await
     }
 
+    #[tracing::instrument]
     async fn list_datacenter_nodes(
         &self,
         q: Option<QueryOptions>,
@@ -237,6 +241,7 @@ impl Catalog for Client {
         self.get("/v1/catalog/nodes", q).await
     }
 
+    #[tracing::instrument]
     async fn list_datacenter_services(
         &self,
         options: Option<QueryOptions>,

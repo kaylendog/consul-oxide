@@ -76,14 +76,17 @@ pub trait ConnectCA: Sealed {
 
 #[async_trait]
 impl ConnectCA for Client {
+    #[tracing::instrument]
     async fn list_ca_root_certs(&self, options: Option<QueryOptions>) -> ConsulResult<CARootList> {
         self.get("/v1/connect/ca/roots", options).await
     }
 
+    #[tracing::instrument]
     async fn get_ca_config(&self, options: Option<QueryOptions>) -> ConsulResult<CAConfig> {
         self.get("/v1/connect/ca/configuration", options).await
     }
 
+    #[tracing::instrument]
     async fn update_ca_config(
         &self,
         payload: CAConfig,

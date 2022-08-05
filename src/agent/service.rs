@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt::Debug};
 
 use async_trait::async_trait;
 
@@ -56,7 +56,7 @@ pub struct ServiceConfig {
     pub port: u16,
 }
 
-#[derive(Serialize, Default)]
+#[derive(Serialize, Default, Debug)]
 pub struct ServiceRegistrationPayload {
     #[serde(rename = "Name")]
     /// Specifies the logical name of the service.
@@ -86,15 +86,15 @@ pub struct ServiceRegistrationPayload {
 #[async_trait]
 pub trait AgentServices: Sealed {
     async fn list_local_services(&self) -> ConsulResult<Vec<Service>>;
-    async fn get_local_service_config<S: AsRef<str> + Send>(
+    async fn get_local_service_config<S: AsRef<str> + Send + Debug>(
         &self,
         id: S,
     ) -> ConsulResult<ServiceConfig>;
-    async fn get_local_service_health<S: AsRef<str> + Send>(
+    async fn get_local_service_health<S: AsRef<str> + Send + Debug>(
         &self,
         name: S,
     ) -> ConsulResult<HealthCheck>;
-    async fn get_local_service_health_by_id<S: AsRef<str> + Send>(
+    async fn get_local_service_health_by_id<S: AsRef<str> + Send + Debug>(
         &self,
         id: S,
     ) -> ConsulResult<HealthCheck>;
@@ -103,27 +103,36 @@ pub trait AgentServices: Sealed {
 
 #[async_trait]
 impl AgentServices for Client {
+    #[tracing::instrument]
     async fn list_local_services(&self) -> ConsulResult<Vec<Service>> {
         self.get("/v1/agent/services", None).await
     }
-    async fn get_local_service_config<S: AsRef<str> + Send>(
+
+    #[tracing::instrument]
+    async fn get_local_service_config<S: AsRef<str> + Send + Debug>(
         &self,
         name: S,
     ) -> ConsulResult<ServiceConfig> {
         self.get(format!("/v1/agent/services/{}", name.as_ref()), None).await
     }
-    async fn get_local_service_health<S: AsRef<str> + Send>(
+
+    #[tracing::instrument]
+    async fn get_local_service_health<S: AsRef<str> + Send + Debug>(
         &self,
         name: S,
     ) -> ConsulResult<HealthCheck> {
         self.get(format!("/v1/agent/health/service/{}", name.as_ref()), None).await
     }
-    async fn get_local_service_health_by_id<S: AsRef<str> + Send>(
+
+    #[tracing::instrument]
+    async fn get_local_service_health_by_id<S: AsRef<str> + Send + Debug>(
         &self,
         id: S,
     ) -> ConsulResult<HealthCheck> {
         self.get(format!("/v1/agent/health/service/id/{}", id.as_ref()), None).await
     }
+
+    #[tracing::instrument]
     async fn register_service(&self, payload: ServiceRegistrationPayload) -> ConsulResult<()> {
         self.put("/v1/agent/service/register", payload, None, None).await
     }
