@@ -33,4 +33,4 @@ jobs:
         ports: 
           - 8500:8500
         options: >-
-          --entrypoint "consul agent -dev -bind='0.0.0.0'"
+          --entrypoint "docker-entrypoint.sh agent -dev -bind='0.0.0.0'"
