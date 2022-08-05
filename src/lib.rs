@@ -59,29 +59,46 @@ use std::{env, time::Duration};
 
 use reqwest::{Client as HttpClient, ClientBuilder};
 
-mod agent;
-mod catalog;
 mod common;
-mod connect;
-mod health;
-mod kv;
 mod request;
+
+#[cfg(feature = "agent")]
+mod agent;
+#[cfg(feature = "catalog")]
+mod catalog;
+#[cfg(feature = "connect")]
+mod connect;
+#[cfg(feature = "health")]
+mod health;
+#[cfg(feature = "kv")]
+mod kv;
+#[cfg(feature = "session")]
 mod session;
 
+#[cfg(feature = "agent")]
 pub use agent::*;
+#[cfg(feature = "catalog")]
 pub use catalog::*;
 pub use common::*;
+#[cfg(feature = "connect")]
 pub use connect::*;
+#[cfg(feature = "health")]
 pub use health::*;
+#[cfg(feature = "kv")]
 pub use kv::*;
+#[cfg(feature = "session")]
 pub use session::*;
 
+/// The Consul client. This struct implements the various traits providing the
+/// various Consul endpoints, and is responsible for making requests to the
+/// Consul agent.
 #[derive(Clone, Debug)]
 pub struct Client {
     config: Config,
 }
 
 impl Client {
+    /// This method creates a new Consul client.
     pub fn new(config: Config) -> Self {
         Client { config }
     }

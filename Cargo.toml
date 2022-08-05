@@ -12,6 +12,17 @@ license = "MIT/Apache-2.0"
 readme = "README.md"
 keywords = ["consul", "discovery"]
 
+[features]
+agent = []
+connect = []
+catalog = []
+health = []
+kv = []
+session = []
+
+default = ["agent", "connect", "catalog", "health", "kv", "session"]
+
+
 [dependencies]
 async-trait = "0.1"
 reqwest = { version = "0.11", features = ["json"] }
