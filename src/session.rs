@@ -60,6 +60,7 @@ pub trait Session: Sealed {
 
 #[async_trait]
 impl Session for Client {
+	#[tracing::instrument]
     async fn create_session(
         &self,
         session: SessionEntry,
@@ -67,10 +68,14 @@ impl Session for Client {
     ) -> ConsulResult<SessionEntry> {
         self.put("/v1/session/create", session, None, options).await
     }
+
+	#[tracing::instrument]
     async fn destroy_session(&self, id: &str, options: Option<QueryOptions>) -> ConsulResult<bool> {
         let path = format!("/v1/session/destroy/{}", id);
         self.put(&path, None as Option<&()>, None, options).await
     }
+
+	#[tracing::instrument]
     async fn get_session_info(
         &self,
         id: &str,
@@ -79,12 +84,16 @@ impl Session for Client {
         let path = format!("/v1/session/info/{}", id);
         self.get(&path, options).await
     }
+
+	#[tracing::instrument]
     async fn list_sessions(
         &self,
         options: Option<QueryOptions>,
     ) -> ConsulResult<Vec<SessionEntry>> {
         self.get("/v1/session/list", options).await
     }
+
+	#[tracing::instrument]
     async fn list_session_for_node(
         &self,
         node: &str,
@@ -94,6 +103,7 @@ impl Session for Client {
         self.get(&path, options).await
     }
 
+	#[tracing::instrument]
     async fn renew_session(
         &self,
         id: &str,
