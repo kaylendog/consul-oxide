@@ -58,7 +58,7 @@ jobs:
         with:
           reporter: github-pr-review
       - name: Run reviewdog yamllint
-        uses: reviewdog/action-yamllint 
+        uses: reviewdog/action-yamllint@v1
         with:
           reporter: github-pr-review
       - name: Run reviewdog cargo-check and clippy
