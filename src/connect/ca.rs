@@ -3,7 +3,7 @@ use serde_json::Value;
 
 use crate::{sealed::Sealed, Client, ConsulResult, QueryOptions};
 
-/// This trait provides the ability to interact with the Secure Session API.
+/// Response payload for the [ConnectCA::get_ca_config] method.
 #[derive(Default, Serialize, Deserialize, Debug)]
 #[serde(default)]
 #[allow(clippy::upper_case_acronyms)]
@@ -18,6 +18,7 @@ pub struct CAConfig {
     modify_index: u64,
 }
 
+/// Response payload for the [ConnectCA::list_ca_root_certs] method.
 #[derive(Default, Serialize, Deserialize, Debug)]
 #[serde(default)]
 #[allow(clippy::upper_case_acronyms)]
@@ -30,6 +31,8 @@ pub struct CARootList {
     roots: Vec<CARoot>,
 }
 
+/// Entry in the root certificate list. Returned by the
+/// [ConnectCA::list_ca_root_certs] method.
 #[derive(Eq, Default, PartialEq, Serialize, Deserialize, Debug)]
 #[serde(default)]
 #[allow(clippy::upper_case_acronyms)]
@@ -53,18 +56,27 @@ pub struct CARoot {
 /// These endpoints provide tools for interacting with Connect's Certificate
 /// Authority mechanism.
 ///
-/// See the [API documentation](https://www.consul.io/api-docs/connect/ca) for more information.
+/// For more information, see the [API documentation](https://www.consul.io/api-docs/connect/ca).
 #[async_trait]
 pub trait ConnectCA: Sealed {
-    /// See the [API documentation] for more information.
+    /// This method returns the current list of trusted CA root certificates in
+    /// the cluster.
+    ///
+    /// Fore more information, see the relevant endpoint's [API documentation].
     ///
     /// [API documentation]: https://www.consul.io/api/connect/ca.html#list-ca-root-certificates
     async fn list_ca_root_certs(&self, options: Option<QueryOptions>) -> ConsulResult<CARootList>;
-    /// See the [API documentation] for more information.
+
+    /// This method returns the current CA configuration.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
     ///
     /// [API documentation]: https://www.consul.io/api/connect/ca.html#get-ca-configuration
     async fn get_ca_config(&self, options: Option<QueryOptions>) -> ConsulResult<CAConfig>;
-    /// See the [API documentation] for more information.
+
+    /// This method updates the configuration for the CA.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
     ///
     /// [API documentation]: https://www.consul.io/api/connect/ca.html#update-ca-configuration
     async fn update_ca_config(

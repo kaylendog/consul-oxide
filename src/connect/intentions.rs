@@ -109,42 +109,7 @@ pub struct IntentionHttpHeaderPermission {
     pub invert: bool,
 }
 
-/// Request payload for the [ConnectIntentions::create_intention_with_id]
-/// method.
-#[derive(Debug, Serialize, Default)]
-pub struct CreateIntentionPayload {
-    /// The source of the intention. For a `SourceType` of consul this is the
-    /// name of a Consul service. The service does not need to be
-    /// registered.
-    #[serde(rename = "SourceName")]
-    pub source_name: String,
-    /// The namespace for the `SourceName` parameter.
-    #[cfg(feature = "enterprise")]
-    #[serde(rename = "SourceNS")]
-    pub source_ns: String,
-    ///  The destination of the intention. The intention destination is always a
-    /// Consul service, unlike the source. The service does not need to be
-    /// registered.
-    #[serde(rename = "DestinationName")]
-    pub destination_name: String,
-    /// The namespace for the `DestinationName` parameter.
-    #[cfg(feature = "enterprise")]
-    #[serde(rename = "DestinationNS")]
-    pub destination_ns: String,
-    /// This is one of "allow" or "deny" for the action that should be taken if
-    /// this intention matches a request.
-    #[serde(rename = "Action")]
-    pub action: IntentionAction,
-    /// Description for the intention. This is not used by Consul, but is
-    /// presented in API responses to assist tooling.
-    #[serde(rename = "Description")]
-    pub description: String,
-    ///  Specifies arbitrary KV metadata pairs.
-    #[serde(rename = "Meta")]
-    pub meta: HashMap<String, String>,
-}
-
-/// Response payload for the [ConnectIntentions::read_intention_by_name]
+/// Response payload for the [ConnectIntentions::read_intention_by_name].
 #[derive(Debug, Deserialize)]
 pub struct ReadIntentionByNameResponse {
     #[serde(rename = "Description")]
@@ -173,11 +138,12 @@ pub struct ReadIntentionByNameResponse {
     pub modify_index: u64,
 }
 
-/// This trait provides implementations for the  `/connect/intentions` endpoint.
+/// This trait provides implementations for the  `/connect/intentions` endpoint,
+/// which provides tools for managing intentions.
 ///
-/// The /connect/intentions endpoint provide tools for managing intentions.
+/// For more information, see the [API documentation].
 ///
-/// See the [API documentation](https://www.consul.io/api-docs/connect/intentions) for more information.
+/// [API documentation]: https://www.consul.io/api-docs/connect/intentions
 #[async_trait]
 pub trait ConnectIntentions {
     /// This method creates a new intention and returns true if it was created
@@ -187,23 +153,40 @@ pub trait ConnectIntentions {
     /// matches the name and destination, the creation will replace the previous
     /// intention.
     ///
-    /// See the [API documentation](https://www.consul.io/api-docs/connect/intentions#upsert-intention-by-name) for more information.
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/connect/intentions#upsert-intention-by-name
     async fn upsert_intention_by_name<S: ToString>(
         source: S,
         desintation: S,
         payload: UpsertIntentionPayload,
     ) -> ConsulResult<bool>;
+
     /// This method reads a specific intention by its unique source and
     /// destination.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/connect/intentions##read-specific-intention-by-name
     async fn read_intention_by_name(
         source: String,
         destination: String,
     ) -> ConsulResult<ReadIntentionByNameResponse>;
+
     /// This method lists all intentions.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/connect/intentions#list-intentions
     async fn list_intentions(
         filter: Option<String>,
     ) -> ConsulResult<Vec<ReadIntentionByNameResponse>>;
+
     /// This method deletes a specific intention by its unique source and
     /// destination.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/connect/intentions#delete-intention-by-name
     async fn delete_intention_by_name<S: ToString>(source: S, destination: S) -> ConsulResult<()>;
 }

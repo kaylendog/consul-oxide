@@ -5,10 +5,12 @@ use reqwest::Method;
 
 use crate::{sealed::Sealed, Client, ConsulError, ConsulResult, QueryOptions};
 
+/// A key-value pair within the Consul KV store.
 #[derive(Clone, Default, Eq, PartialEq, Serialize, Deserialize, Debug)]
 #[serde(default)]
 #[allow(clippy::upper_case_acronyms)]
 pub struct KVPair {
+    /// The key of the key-value pair.
     #[serde(rename = "Key")]
     pub key: String,
     #[serde(rename = "CreateIndex")]
@@ -19,6 +21,7 @@ pub struct KVPair {
     pub lockindex: Option<u64>,
     #[serde(rename = "Flags")]
     pub flags: Option<u64>,
+    /// The value of the key-value pair.
     #[serde(rename = "Value")]
     pub value: String,
     #[serde(rename = "Session")]
@@ -27,11 +30,42 @@ pub struct KVPair {
 
 #[async_trait]
 pub trait KV: Sealed {
+    // TODO: deprecate
     async fn acquire_entry(&self, _: &KVPair, _: Option<QueryOptions>) -> ConsulResult<bool>;
+
+    /// This method deletes a single key or all keys sharing a prefix.
+    ///
+    /// For more information, consult the relevant endpoint's [API
+    /// documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/kv#delete-key
     async fn delete_entry(&self, _: &str, _: Option<QueryOptions>) -> ConsulResult<bool>;
+
+    /// This method returns the specified key. If no key exists at the given
+    /// path, an empty [Vec] is returned.
+    ///
+    /// For more information, consult the relevant endpoint's [API
+    /// documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/kv#read-key
     async fn get_entry(&self, _: &str, _: Option<QueryOptions>) -> ConsulResult<Vec<KVPair>>;
+
+    /// This method returns a [Vec] of [KVPair]s for all keys sharing the given
+    /// prefix.
+    ///
+    /// The method makes use of the `recurse` parameter used by the [read key](https://www.consul.io/api-docs/kv#read-key) endpoint.
     async fn list_entries(&self, _: &str, _: Option<QueryOptions>) -> ConsulResult<Vec<KVPair>>;
+
+    /// This method updates the value of the specified key. If no key exists
+    /// at the given path, the key will be created.
+    ///
+    /// For more information, consult the relevant endpoint's [API
+    /// documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/kv#create-update-key
     async fn put_entry(&self, _: &KVPair, _: Option<QueryOptions>) -> ConsulResult<bool>;
+
+    // TODO: deprecate
     async fn release_entry(&self, _: &KVPair, _: Option<QueryOptions>) -> ConsulResult<bool>;
 }
 

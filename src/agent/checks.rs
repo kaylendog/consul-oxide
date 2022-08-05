@@ -198,7 +198,7 @@ pub trait AgentChecks {
     /// This method returns all checks that are registered with the local
     /// agent.
     ///
-    /// For more information, consult the relevant endpoint's [API
+    /// For more information, see the relevant endpoint's [API
     /// documentation].
     ///
     /// [API documentation]: https://www.consul.io/api/agent/check.html#list-checks
@@ -206,7 +206,7 @@ pub trait AgentChecks {
 
     /// This method registers a check with the local agent.
     ///
-    /// For more information, consult the relevant endpoint's [API
+    /// For more information, see the relevant endpoint's [API
     /// documentation].
     ///
     /// [API documentation]: https://www.consul.io/api/agent/check.html#register-check
@@ -214,7 +214,7 @@ pub trait AgentChecks {
 
     /// This method deregisters a check with the local agent.
     ///
-    /// For more information, consult the relevant endpoint's [API
+    /// For more information, see the relevant endpoint's [API
     /// documentation].
     ///
     /// [API documentation]: https://www.consul.io/api/agent/check.html#deregister-check
