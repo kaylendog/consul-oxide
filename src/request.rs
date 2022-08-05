@@ -1,4 +1,4 @@
-use std::{collections::HashMap, future::Future, str, fmt::Debug};
+use std::{collections::HashMap, fmt::Debug, future::Future, str};
 
 use async_trait::async_trait;
 use reqwest::{Method, StatusCode};
@@ -32,7 +32,7 @@ impl<T: Send, E: Send> AndThenAsync<T, E> for std::result::Result<T, E> {
 }
 
 impl Client {
-	#[tracing::instrument]
+    #[tracing::instrument]
     pub(crate) async fn send_with_empty<
         Path: AsRef<str> + Debug,
         Body: Serialize + Debug,
@@ -91,8 +91,12 @@ impl Client {
     ///
     /// This method will error if the request fails, and will panic if the
     /// URL or parameters are invalid.
-	#[tracing::instrument]
-    pub(crate) async fn send<Path: AsRef<str> + Debug, Body: Serialize + Debug, Response: DeserializeOwned>(
+    #[tracing::instrument]
+    pub(crate) async fn send<
+        Path: AsRef<str> + Debug,
+        Body: Serialize + Debug,
+        Response: DeserializeOwned,
+    >(
         &self,
         method: Method,
         path: Path,
@@ -130,7 +134,7 @@ impl Client {
             .map_err(ConsulError::HttpError)
     }
     /// This method makes a GET request with query parameters to the given path.
-	#[tracing::instrument]
+    #[tracing::instrument]
     pub(crate) async fn get_with_params<Path: AsRef<str> + Debug, T: DeserializeOwned>(
         &self,
         path: Path,
@@ -141,7 +145,7 @@ impl Client {
     }
 
     /// This method makes a GET request to the given path.
-	#[tracing::instrument]
+    #[tracing::instrument]
     pub(crate) async fn get<Path: AsRef<str> + Debug, T: DeserializeOwned>(
         &self,
         path: Path,
@@ -151,8 +155,12 @@ impl Client {
     }
 
     /// This method makes a PUT request to the given path.
-	#[tracing::instrument]
-    pub(crate) async fn put<Path: AsRef<str> + Debug, Body: Serialize + Debug, Response: DeserializeOwned>(
+    #[tracing::instrument]
+    pub(crate) async fn put<
+        Path: AsRef<str> + Debug,
+        Body: Serialize + Debug,
+        Response: DeserializeOwned,
+    >(
         &self,
         path: Path,
         body: Body,
@@ -163,7 +171,7 @@ impl Client {
     }
 
     /// This method makes a DELETE request to the given path.
-	#[tracing::instrument]
+    #[tracing::instrument]
     pub(crate) async fn delete<Path: AsRef<str> + Debug, Response: DeserializeOwned>(
         &self,
         path: Path,
