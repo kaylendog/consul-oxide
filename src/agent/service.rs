@@ -85,19 +85,50 @@ pub struct ServiceRegistrationPayload {
 /// Consul. These should not be confused with services in the catalog.
 #[async_trait]
 pub trait AgentServices: Sealed {
+    /// This method returns all the services that are registered with the
+    /// local agent. These services were either provided through configuration
+    /// files or added dynamically using the HTTP API.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/agent/service#list-services
     async fn list_local_services(&self) -> ConsulResult<Vec<Service>>;
+
+    /// This method returns the full service definition for a single service
+    /// instance registered on the local agent.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API Documentation]: https://www.consul.io/api-docs/agent/service#get-service-configuration
     async fn get_local_service_config<S: AsRef<str> + Send + Debug>(
         &self,
         id: S,
     ) -> ConsulResult<ServiceConfig>;
+
+    /// This method retrieves an aggregated state of service(s) on the local
+    /// agent by name.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/agent/service#get-local-service-health
     async fn get_local_service_health<S: AsRef<str> + Send + Debug>(
         &self,
         name: S,
     ) -> ConsulResult<HealthCheck>;
+
+    /// This method retrieves the health state of a specific service on the
+    /// local agent by ID.
     async fn get_local_service_health_by_id<S: AsRef<str> + Send + Debug>(
         &self,
         id: S,
     ) -> ConsulResult<HealthCheck>;
+
+    /// This endpoint adds a new service, with optional health checks, to the
+    /// local agent.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/agent/service#register-service
     async fn register_service(&self, payload: ServiceRegistrationPayload) -> ConsulResult<()>;
 }
 

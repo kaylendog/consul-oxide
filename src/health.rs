@@ -61,7 +61,10 @@ pub struct ServiceEntry {
 
 #[async_trait]
 pub trait Health: Sealed {
-    /// See the [API documentation] for more information.
+    /// This endpoint returns the checks associated with the service provided on
+    /// the path.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
     ///
     /// [API documentation]: https://www.consul.io/api-docs/health#list-nodes-for-service
     async fn list_service_instances(

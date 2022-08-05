@@ -79,7 +79,7 @@ pub struct AgentMember {
 
 /// A service hosted on this node.
 ///
-/// For more information, see the [Agent:]
+/// For more information, see [Agent::list_members].
 #[derive(Eq, Default, PartialEq, Serialize, Deserialize, Debug)]
 #[serde(default)]
 pub struct AgentService {
@@ -115,7 +115,7 @@ pub struct AgentService {
 /// example, the agent registers services and checks with the Catalog and
 /// performs anti-entropy to recover from outages.
 ///
-/// For more information consult the [API documentation] for the `/agent`
+/// For more information see the [API documentation] for the `/agent`
 /// endpoint on the Consul website.
 ///
 /// [API documentation]: https://www.consul.io/api/agent/check.html#list-checks
@@ -124,7 +124,7 @@ pub trait Agent: Sealed {
     /// This method returns all checks that are registered with the local
     /// agent.
     ///
-    /// For more information, consult the relevant endpoint's [API
+    /// For more information, see the relevant endpoint's [API
     /// documentation].
     ///
     /// [API documentation]: https://www.consul.io/api/agent/check.html#list-checks
@@ -134,7 +134,7 @@ pub trait Agent: Sealed {
     /// pool. Due to the nature of gossip, this is eventually consistent: the
     /// results may differ by agent.
     ///
-    /// For more information, consult the relevant endpoint's [API
+    /// For more information, see the relevant endpoint's [API
     /// documentation].
     ///
     /// [API documentation]: https://www.consul.io/api-docs/agent#list-members.
@@ -142,7 +142,7 @@ pub trait Agent: Sealed {
 
     /// This method instructs the agent to reload its configuration.
     ///
-    /// For more information, consult the relevant endpoint's [API
+    /// For more information, see the relevant endpoint's [API
     /// documentation].
     ///
     /// [API documentation]: https://www.consul.io/api-docs/agent#reload-agent.
@@ -152,7 +152,7 @@ pub trait Agent: Sealed {
     /// mode, the node will be marked as unavailable and will not be present in
     /// DNS or API queries.
     ///
-    /// For more information, consult the relevant endpoint's [API
+    /// For more information, see the relevant endpoint's [API
     /// documentation].
     ///
     /// [API documentation]: https://www.consul.io/api-docs/agent#enable-maintenance-mode.
@@ -162,7 +162,7 @@ pub trait Agent: Sealed {
     /// This method instructs the agent to attempt to connect to a given
     /// address.
     ///
-    /// For more information, consult the relevant endpoint's [API
+    /// For more information, see the relevant endpoint's [API
     /// documentation].
     ///
     /// [API documentation]: https://www.consul.io/api-docs/agent#join-agent.
@@ -171,7 +171,7 @@ pub trait Agent: Sealed {
     /// This endpoint triggers a graceful leave and shutdown of the agent. It is
     /// used to ensure other nodes see the agent as "left" instead of "failed".
     ///
-    /// For more information, consult the relevant endpoint's [API
+    /// For more information, see the relevant endpoint's [API
     /// documentation].
     ///
     /// [API documentation]: https://www.consul.io/api/agent.html#graceful-leave-and-shutdown.
@@ -181,7 +181,7 @@ pub trait Agent: Sealed {
     /// the LAN and WAN gossip pools. If a node fails unexpectedly, then it will
     /// be in a failed state.
     ///
-    /// For more information, consult the relevant endpoint's [API
+    /// For more information, see the relevant endpoint's [API
     /// documentation].
     ///
     /// [API documentation]:  https://www.consul.io/api-docs/agent#force-leave-and-shutdown.

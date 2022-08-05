@@ -173,11 +173,12 @@ pub struct ReadIntentionByNameResponse {
     pub modify_index: u64,
 }
 
-/// This trait provides implementations for the  `/connect/intentions` endpoint.
+/// This trait provides implementations for the  `/connect/intentions` endpoint,
+/// which provides tools for managing intentions.
 ///
-/// The /connect/intentions endpoint provide tools for managing intentions.
+/// For more information, see the [API documentation].
 ///
-/// See the [API documentation](https://www.consul.io/api-docs/connect/intentions) for more information.
+/// [API documentation]: https://www.consul.io/api-docs/connect/intentions
 #[async_trait]
 pub trait ConnectIntentions {
     /// This method creates a new intention and returns true if it was created
@@ -187,23 +188,40 @@ pub trait ConnectIntentions {
     /// matches the name and destination, the creation will replace the previous
     /// intention.
     ///
-    /// See the [API documentation](https://www.consul.io/api-docs/connect/intentions#upsert-intention-by-name) for more information.
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/connect/intentions#upsert-intention-by-name
     async fn upsert_intention_by_name<S: ToString>(
         source: S,
         desintation: S,
         payload: UpsertIntentionPayload,
     ) -> ConsulResult<bool>;
+
     /// This method reads a specific intention by its unique source and
     /// destination.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/connect/intentions##read-specific-intention-by-name
     async fn read_intention_by_name(
         source: String,
         destination: String,
     ) -> ConsulResult<ReadIntentionByNameResponse>;
+
     /// This method lists all intentions.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/connect/intentions#list-intentions
     async fn list_intentions(
         filter: Option<String>,
     ) -> ConsulResult<Vec<ReadIntentionByNameResponse>>;
+
     /// This method deletes a specific intention by its unique source and
     /// destination.
+    ///
+    /// For more information, see the relevant endpoint's [API documentation].
+    ///
+    /// [API documentation]: https://www.consul.io/api-docs/connect/intentions#delete-intention-by-name
     async fn delete_intention_by_name<S: ToString>(source: S, destination: S) -> ConsulResult<()>;
 }
