@@ -27,8 +27,7 @@ pub struct UpsertIntentionPayload {
     pub description: String,
 }
 
-/// Used to specify action type in
-/// [UpsertIntentionPayload].
+/// Used to specify action type in [UpsertIntentionPayload].
 #[derive(Debug, Serialize, Deserialize)]
 pub enum IntentionAction {
     #[serde(rename = "allow")]
