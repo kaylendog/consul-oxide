@@ -109,41 +109,6 @@ pub struct IntentionHttpHeaderPermission {
     pub invert: bool,
 }
 
-/// Request payload for the [ConnectIntentions::create_intention_with_id]
-/// method.
-#[derive(Debug, Serialize, Default)]
-pub struct CreateIntentionPayload {
-    /// The source of the intention. For a `SourceType` of consul this is the
-    /// name of a Consul service. The service does not need to be
-    /// registered.
-    #[serde(rename = "SourceName")]
-    pub source_name: String,
-    /// The namespace for the `SourceName` parameter.
-    #[cfg(feature = "enterprise")]
-    #[serde(rename = "SourceNS")]
-    pub source_ns: String,
-    ///  The destination of the intention. The intention destination is always a
-    /// Consul service, unlike the source. The service does not need to be
-    /// registered.
-    #[serde(rename = "DestinationName")]
-    pub destination_name: String,
-    /// The namespace for the `DestinationName` parameter.
-    #[cfg(feature = "enterprise")]
-    #[serde(rename = "DestinationNS")]
-    pub destination_ns: String,
-    /// This is one of "allow" or "deny" for the action that should be taken if
-    /// this intention matches a request.
-    #[serde(rename = "Action")]
-    pub action: IntentionAction,
-    /// Description for the intention. This is not used by Consul, but is
-    /// presented in API responses to assist tooling.
-    #[serde(rename = "Description")]
-    pub description: String,
-    ///  Specifies arbitrary KV metadata pairs.
-    #[serde(rename = "Meta")]
-    pub meta: HashMap<String, String>,
-}
-
 /// Response payload for the [ConnectIntentions::read_intention_by_name].
 #[derive(Debug, Deserialize)]
 pub struct ReadIntentionByNameResponse {
