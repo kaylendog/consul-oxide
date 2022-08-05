@@ -75,6 +75,7 @@ pub trait Health: Sealed {
 
 #[async_trait]
 impl Health for Client {
+    #[tracing::instrument]
     async fn list_service_instances(
         &self,
         service: &str,

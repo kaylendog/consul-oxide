@@ -37,6 +37,7 @@ pub trait KV: Sealed {
 
 #[async_trait]
 impl KV for Client {
+    #[tracing::instrument]
     async fn acquire_entry(
         &self,
         pair: &KVPair,
@@ -57,10 +58,13 @@ impl KV for Client {
         }
     }
 
+    #[tracing::instrument]
     async fn delete_entry(&self, key: &str, options: Option<QueryOptions>) -> ConsulResult<bool> {
         let path = format!("/v1/kv/{}", key);
         self.delete(&path, None, options).await
     }
+
+    #[tracing::instrument]
     async fn get_entry(
         &self,
         key: &str,
@@ -70,6 +74,7 @@ impl KV for Client {
         self.get(&path, options).await
     }
 
+    #[tracing::instrument]
     async fn list_entries(
         &self,
         prefix: &str,
@@ -85,6 +90,7 @@ impl KV for Client {
             .map(|r: Option<Vec<KVPair>>| r.unwrap_or_default())
     }
 
+    #[tracing::instrument]
     async fn put_entry(&self, pair: &KVPair, o: Option<QueryOptions>) -> ConsulResult<bool> {
         let mut params = HashMap::new();
         if let Some(i) = pair.flags {
@@ -96,6 +102,7 @@ impl KV for Client {
         self.put(&path, &pair.value, None, o).await
     }
 
+    #[tracing::instrument]
     async fn release_entry(&self, pair: &KVPair, o: Option<QueryOptions>) -> ConsulResult<bool> {
         let mut params = HashMap::new();
         if let Some(i) = pair.flags {

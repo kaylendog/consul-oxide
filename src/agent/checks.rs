@@ -39,7 +39,7 @@ pub struct AgentCheck {
 /// See the [API Documentation] for more information.
 ///
 /// [API Documentation]: https://www.consul.io/api-docs/agent/check#json-request-body-schema
-#[derive(Serialize, Default)]
+#[derive(Serialize, Default, Debug)]
 #[serde(rename_all = "PascalCase")]
 pub struct RegisterCheckPayload {
     /// Specifies a unique ID for this check on the node. This defaults to the
@@ -223,12 +223,17 @@ pub trait AgentChecks {
 
 #[async_trait]
 impl AgentChecks for Client {
+    #[tracing::instrument]
     async fn list_checks(&self) -> ConsulResult<HashMap<String, AgentCheck>> {
         self.get("/v1/agent/checks", None).await
     }
+
+    #[tracing::instrument]
     async fn register_check(&self, check: RegisterCheckPayload) -> ConsulResult<()> {
         self.put("/v1/agent/check/register", check, None, None).await
     }
+
+    #[tracing::instrument]
     async fn deregister_check(&self, check_id: &str) -> ConsulResult<()> {
         self.put(&format!("/v1/agent/check/deregister/{}", check_id), (), None, None).await
     }
