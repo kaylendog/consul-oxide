@@ -32,5 +32,5 @@ jobs:
         image: consul
         ports: 
           - 8500:8500
-        cmd: >-
+        options: >-
           --entrypoint "consul agent -dev -bind="0.0.0.0"
