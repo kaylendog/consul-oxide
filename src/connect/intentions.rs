@@ -29,13 +29,18 @@ pub struct UpsertIntentionPayload {
 
 /// Used to specify action type in
 /// [UpsertIntentionPayload].
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum IntentionAction {
     #[serde(rename = "allow")]
     Allow,
     #[serde(rename = "deny")]
-    #[default]
     Deny,
+}
+
+impl Default for IntentionAction {
+    fn default() -> Self {
+        IntentionAction::Deny
+    }
 }
 
 /// L7 attributes datatype.
