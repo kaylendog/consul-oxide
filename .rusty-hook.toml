@@ -1,6 +1,7 @@
 [hooks]
 pre-commit = """
 	cargo +nightly fmt && \
+	git add $(git diff --name-only --cached) &&\
 	cargo clippy --fix --allow-staged && \
 	git add $(git diff --name-only --cached)\
 	"""
