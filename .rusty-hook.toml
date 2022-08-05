@@ -1,7 +1,9 @@
 [hooks]
 pre-commit = """
+	echo hooks: running rustfmt... && \
 	cargo +nightly fmt && \
-	git add $(git diff --name-only --cached) &&\
+	git add $(git diff --name-only --cached) && \
+	echo hooks: running clippy... && \
 	cargo clippy --fix --allow-staged && \
 	git add $(git diff --name-only --cached)\
 	"""
