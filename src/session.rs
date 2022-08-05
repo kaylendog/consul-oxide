@@ -2,6 +2,7 @@ use async_trait::async_trait;
 
 use crate::{sealed::Sealed, Client, ConsulResult, QueryOptions};
 
+/// A wrapper struct for session IDs.
 #[derive(Clone, Default, Eq, PartialEq, Serialize, Deserialize, Debug)]
 #[serde(default)]
 pub struct SessionID {
@@ -9,6 +10,7 @@ pub struct SessionID {
     pub id: String,
 }
 
+/// A session defined on the agent.
 #[derive(Clone, Default, Eq, PartialEq, Serialize, Deserialize, Debug)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct SessionEntry {
@@ -23,6 +25,7 @@ pub struct SessionEntry {
     pub ttl: Option<String>,
 }
 
+/// This trait provides methods for interacting with the agent's session store.
 #[async_trait]
 pub trait Session: Sealed {
     /// This method initializes a new session. Sessions must be associated

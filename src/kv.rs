@@ -28,6 +28,7 @@ pub struct KVPair {
     pub session: Option<String>,
 }
 
+/// This trait provides methods for interacting with the Consul KV store.
 #[async_trait]
 pub trait KV: Sealed {
     // TODO: deprecate

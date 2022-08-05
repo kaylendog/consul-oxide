@@ -80,6 +80,8 @@ pub struct ServiceConfig {
     // pub proxy: Proxy
 }
 
+/// Defines the configuration of a service to be created. Used by the
+/// [AgentServices::register_service] method.
 #[derive(Serialize, Default, Debug)]
 pub struct ServiceRegistrationPayload {
     #[serde(rename = "Name")]

@@ -4,6 +4,8 @@ use async_trait::async_trait;
 
 use crate::{sealed::Sealed, AgentService, Client, ConsulResult, QueryOptions};
 
+/// A registered service health check. Returned with its associated
+/// [ServiceEntry] instance by [Health::list_service_instances].
 #[derive(Eq, Default, PartialEq, Serialize, Deserialize, Debug)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct HealthCheck {
@@ -34,14 +36,19 @@ pub struct Node {
     pub modifyindex: u64,
 }
 
+/// An [AgentService] with its associated [HealthCheck]s.
 #[derive(Eq, Default, PartialEq, Serialize, Deserialize, Debug)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct ServiceEntry {
+    /// The node the service is associated with.
     pub node: Node,
+    /// The service configuration.
     pub service: AgentService,
+    /// The health checks associated with the service.
     pub checks: Vec<HealthCheck>,
 }
 
+/// This trait provides methods for interacting with the `/health` endpoints.
 #[async_trait]
 pub trait Health: Sealed {
     /// This endpoint returns the checks associated with the service provided on

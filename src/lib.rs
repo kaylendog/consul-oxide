@@ -104,16 +104,28 @@ impl Client {
     }
 }
 
+/// The configuration for the Consul client.
 #[derive(Clone, Debug)]
 pub struct Config {
+    /// The address of the Consul agent.
     pub address: String,
+    /// The name of the datacenter this agent is hosted in.
     pub datacenter: Option<String>,
+    /// The dedicated HTTP client to use for requests. Most users should not
+    /// need to modify this unless authentication is necessary.
     pub http_client: HttpClient,
+    /// The Consul agent's access token.
     pub token: Option<String>,
+    /// The timeout for requests.
     pub wait_time: Option<Duration>,
 }
 
 impl Config {
+    /// This method creates a new default configuration for the Consul client
+    /// from the current environment.
+    ///
+    /// # Panics
+    /// Panics if `request::Client` construction fails.
     pub fn new_from_env() -> Config {
         let consul_addr = match env::var("CONSUL_HTTP_ADDR") {
             Ok(val) => {
@@ -136,7 +148,7 @@ impl Config {
         }
     }
 
-    /// Create a new `Config` with the given address.
+    /// This method creates a new `Config` with the given address.
     ///
     /// # Panics
     /// Panics if `request::Client` construction fails.
@@ -182,10 +194,13 @@ pub enum ConsulError {
     DecodeError(#[from] serde_json::Error),
 }
 
+/// Query options to fine tune requests made to the agent.
 #[derive(Clone, Debug, Default)]
 pub struct QueryOptions {
+    /// The datacenter to query.
     pub datacenter: Option<String>,
     pub wait_index: Option<u64>,
+    /// The maximum time to wait for a query to complete.
     pub wait_time: Option<Duration>,
 }
 

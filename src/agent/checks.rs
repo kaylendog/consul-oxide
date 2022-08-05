@@ -186,13 +186,8 @@ pub struct RegisterCheckPayload {
     pub ttl: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct RegisterCheckPayloadHeader {
-    #[serde(rename = "Content-Type")]
-    pub content_type: Vec<String>,
-}
-
+/// This trait provides methods for interacting with the `/agent/check`
+/// endpoints.
 #[async_trait]
 pub trait AgentChecks {
     /// This method returns all checks that are registered with the local
