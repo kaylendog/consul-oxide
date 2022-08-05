@@ -1,4 +1,4 @@
-# consul-oxide [![Checks](https://github.com/kaylendog/consul-oxide/actions/workflows/check.yml/badge.svg)](https://github.com/kaylendog/consul-oxide/actions/workflows/check.yml)
+# consul-oxide [![Checks](https://github.com/kaylendog/consul-oxide/actions/workflows/check.yml/badge.svg)](https://github.com/kaylendog/consul-oxide/actions/workflows/check.yml) [![codecov](https://codecov.io/gh/kaylendog/consul-oxide/branch/main/graph/badge.svg?token=C0124N56ZB)](https://codecov.io/gh/kaylendog/consul-oxide)
 
 `consul-oxide` is a library for interacting with Consul agents via their HTTP API.
 Consul is a service mesh solution providing a full featured control plane
