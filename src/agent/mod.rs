@@ -4,39 +4,11 @@ use async_trait::async_trait;
 
 use crate::{sealed::Sealed, Client, ConsulResult};
 
+mod checks;
 mod service;
 
+pub use checks::*;
 pub use service::*;
-
-/// A health check run on a service hosted on this node.
-#[derive(Clone, Default, Eq, PartialEq, Serialize, Deserialize, Debug)]
-#[serde(default)]
-pub struct AgentCheck {
-    /// The node the service is running on.
-    #[serde(rename = "Node")]
-    pub node: String,
-    /// The ID of the service within the agent.
-    #[serde(rename = "CheckID")]
-    pub check_id: String,
-    /// The name of the service.
-    #[serde(rename = "Name")]
-    pub name: String,
-    /// The status of the check.
-    #[serde(rename = "Status")]
-    pub status: String,
-    /// Notes attached to this check.
-    #[serde(rename = "Notes")]
-    pub notes: String,
-    /// Output of the check.
-    #[serde(rename = "Output")]
-    pub output: String,
-    /// The ID of the service.
-    #[serde(rename = "ServiceID")]
-    pub service_id: String,
-    /// The name of the service.
-    #[serde(rename = "ServiceName")]
-    pub service_name: String,
-}
 
 /// A member within the cluster gossip pool.
 ///
@@ -118,18 +90,9 @@ pub struct AgentService {
 /// For more information see the [API documentation] for the `/agent`
 /// endpoint on the Consul website.
 ///
-/// [API documentation]: https://www.consul.io/api/agent/check.html#list-checks
+/// [API documentation]: https://www.consul.io/api/agent.
 #[async_trait]
 pub trait Agent: Sealed {
-    /// This method returns all checks that are registered with the local
-    /// agent.
-    ///
-    /// For more information, see the relevant endpoint's [API
-    /// documentation].
-    ///
-    /// [API documentation]: https://www.consul.io/api/agent/check.html#list-checks
-    async fn list_checks(&self) -> ConsulResult<HashMap<String, AgentCheck>>;
-
     /// This method returns the members the agent sees in the cluster gossip
     /// pool. Due to the nature of gossip, this is eventually consistent: the
     /// results may differ by agent.
@@ -190,11 +153,6 @@ pub trait Agent: Sealed {
 
 #[async_trait]
 impl Agent for Client {
-    #[tracing::instrument]
-    async fn list_checks(&self) -> ConsulResult<HashMap<String, AgentCheck>> {
-        self.get("/v1/agent/checks", None).await
-    }
-
     #[tracing::instrument]
     async fn list_members(&self, wan: bool) -> ConsulResult<AgentMember> {
         let mut params = HashMap::new();

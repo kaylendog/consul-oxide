@@ -170,6 +170,23 @@ impl Client {
         self.send::<Path, Body, Response>(Method::PUT, path, params, Some(body), options).await
     }
 
+    /// This method makes a PUT request to the given path, with the response
+    /// potentially being empty.
+    pub(crate) async fn put_with_empty<
+        Path: AsRef<str> + Debug,
+        Body: Serialize + Debug,
+        Response: DeserializeOwned,
+    >(
+        &self,
+        path: Path,
+        body: Body,
+        params: Option<HashMap<String, String>>,
+        options: Option<QueryOptions>,
+    ) -> ConsulResult<Option<Response>> {
+        self.send_with_empty::<Path, Body, Response>(Method::PUT, path, params, Some(body), options)
+            .await
+    }
+
     /// This method makes a DELETE request to the given path.
     #[tracing::instrument]
     pub(crate) async fn delete<Path: AsRef<str> + Debug, Response: DeserializeOwned>(
