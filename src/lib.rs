@@ -139,7 +139,7 @@ impl Default for Config {
     fn default() -> Self {
         let client = ClientBuilder::new().build().unwrap();
         Config {
-            address: String::from("http://localhost:8500"),
+            address: String::from("http://127.0.0.1:8500"),
             datacenter: None,
             http_client: client,
             token: None,
