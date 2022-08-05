@@ -129,7 +129,7 @@ pub struct RegisterCheckPayload {
     pub disable_redirects: bool,
     /// Specifies the frequency at which to run this check. This is required for
     /// HTTP and TCP checks.
-    pub interval: Option<String>,
+    pub interval: String,
     /// Specifies a timeout for outgoing connections in the case of a Script,
     /// HTTP, TCP, or gRPC check. Can be specified in the form of "10s" or "5m"
     /// (i.e., 10 seconds or 5 minutes, respectively).
@@ -230,12 +230,16 @@ impl AgentChecks for Client {
 
     #[tracing::instrument]
     async fn register_check(&self, check: RegisterCheckPayload) -> ConsulResult<()> {
-        self.put("/v1/agent/check/register", check, None, None).await
+        self.put_with_empty("/v1/agent/check/register", check, None, None)
+            .await
+            .map(|_: Option<()>| ())
     }
 
     #[tracing::instrument]
     async fn deregister_check(&self, check_id: &str) -> ConsulResult<()> {
-        self.put(&format!("/v1/agent/check/deregister/{}", check_id), (), None, None).await
+        self.put_with_empty(&format!("/v1/agent/check/deregister/{}", check_id), (), None, None)
+            .await
+            .map(|_: Option<()>| ())
     }
 }
 
