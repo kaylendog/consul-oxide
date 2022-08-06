@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use async_trait::async_trait;
 use serde::Deserialize;
 
-use crate::ConsulResult;
+use crate::{Client, ConsulResult};
 
 mod token;
 
@@ -139,10 +139,42 @@ pub trait Acl {
 
     /// This method is used to exchange an auth method bearer token for a
     /// newly-created Consul ACL token.
-    async fn login(&self, payload: LoginPayload) -> ConsulResult<ConsulAcl>;
+    async fn login_to_auth_method(&self, payload: LoginPayload) -> ConsulResult<ConsulAcl>;
 
     /// This method is used to destroy a token created via the [Acl::login]
     /// method. The token deleted is specified with the X-Consul-Token header or
     /// the token query parameter.
-    async fn logout(&self) -> ConsulResult<()>;
+    async fn logout_from_auth_method(&self) -> ConsulResult<()>;
+}
+
+#[async_trait]
+impl Acl for Client {
+    async fn bootstrap_acls(&self) -> ConsulResult<Vec<ConsulAcl>> {
+        self.put("/v1/acl/bootstrap", (), None, None).await
+    }
+
+    async fn check_acl_replication(&self) -> ConsulResult<AclReplication> {
+        self.get("/v1/acl/replication", None).await
+    }
+
+    async fn login_to_auth_method(&self, payload: LoginPayload) -> ConsulResult<ConsulAcl> {
+        self.post("/v1/acl/login", payload, None, None).await
+    }
+
+    async fn logout_from_auth_method(&self) -> ConsulResult<()> {
+        self.post_with_empty("/v1/acl/logout", (), None, None).await.map(|_: Option<()>| ())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Acl;
+    use crate::{Client, Config};
+
+    #[tokio::test]
+    async fn test_check_acl_replication() {
+        let config = Config::default();
+        let client = Client::new(config);
+        client.check_acl_replication().await.unwrap();
+    }
 }
