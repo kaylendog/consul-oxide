@@ -154,6 +154,18 @@ impl Client {
         self.get_with_params(path, None, options).await
     }
 
+    /// This method makes a GET request to the given path, with the response
+    /// potentially being empty.
+    #[tracing::instrument]
+    pub(crate) async fn get_with_empty<Path: AsRef<str> + Debug, Response: DeserializeOwned>(
+        &self,
+        path: Path,
+        params: Option<HashMap<String, String>>,
+        options: Option<QueryOptions>,
+    ) -> ConsulResult<Option<Response>> {
+        self.send_with_empty::<Path, (), Response>(Method::GET, path, params, None, options).await
+    }
+
     /// This method makes a POST request to the given path.
     #[tracing::instrument]
     pub(crate) async fn post<
