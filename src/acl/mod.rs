@@ -135,7 +135,7 @@ pub trait Acl {
     /// This method returns the status of the ACL replication processes in the
     /// datacenter. This is intended to be used by operators or by automation
     /// checking to discover the health of ACL replication.
-    async fn check_acl_replication(&self) -> ConsulResult<Option<AclReplication>>;
+    async fn check_acl_replication(&self) -> ConsulResult<AclReplication>;
 
     /// This method is used to exchange an auth method bearer token for a
     /// newly-created Consul ACL token.
@@ -153,8 +153,8 @@ impl Acl for Client {
         self.put("/v1/acl/bootstrap", (), None, None).await
     }
 
-    async fn check_acl_replication(&self) -> ConsulResult<Option<AclReplication>> {
-        self.get_with_empty("/v1/acl/replication", None, None).await
+    async fn check_acl_replication(&self) -> ConsulResult<AclReplication> {
+        self.get("/v1/acl/replication", None).await
     }
 
     async fn login_to_auth_method(&self, payload: LoginPayload) -> ConsulResult<ConsulAcl> {
