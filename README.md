@@ -8,6 +8,11 @@ For more information on what Consul is, read the [Consul documentation](https://
 
 This library is a fork of [consul-rust](https://github.com/pierresouchay/consul-rust) by  pierresouchay and contributors. Full credit goes to them for the original library.
 
+
+### 🚧 Warning 🚧
+
+`consul-oxide` is still under development, and its API is changing very rapidly. This library is not (yet) ready for production use!
+
 ## Supported Features
 
 The key features of Consul, and thus this crate, are:
