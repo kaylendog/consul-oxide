@@ -133,3 +133,16 @@ impl AclPolicies for Client {
         self.get("/v1/acl/policies", None).await
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{AclPolicies, Client, Config};
+
+    #[tokio::test]
+    async fn test_list_policies() {
+        let client = Client::new(Config::default());
+        let policies = client.list_policies().await.unwrap();
+        // should return an empty vec by default
+        assert!(policies.is_empty());
+    }
+}
