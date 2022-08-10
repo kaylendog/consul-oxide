@@ -1,0 +1,6 @@
+services:
+  consul_test_instance:
+    container_name: consul_test_instance
+    image: consul:latest
+    ports:
+      - 8500:8500

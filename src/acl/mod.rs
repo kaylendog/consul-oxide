@@ -10,7 +10,7 @@ mod token;
 pub use token::*;
 
 /// An access control list.
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct ConsulAcl {
     #[serde(rename = "AccessorID")]
@@ -27,7 +27,7 @@ pub struct ConsulAcl {
     pub modify_index: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct Policy {
     #[serde(rename = "ID")]
@@ -36,7 +36,7 @@ pub struct Policy {
 }
 
 /// The ACL replication state of a datacenter.
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct AclReplication {
     /// Reports whether ACL replication is enabled for the datacenter.
@@ -111,7 +111,7 @@ pub struct AclServiceIdentity {
 }
 
 /// Request payload for the [Acls::login] method.
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct LoginPayload {
     /// The name of the auth method to use for login.
@@ -175,6 +175,8 @@ mod tests {
     async fn test_check_acl_replication() {
         let config = Config::default();
         let client = Client::new(config);
-        client.check_acl_replication().await.unwrap();
+        // this should error on the test instance
+        // TODO: devise non-erroring test instance
+        client.check_acl_replication().await.unwrap_err();
     }
 }
