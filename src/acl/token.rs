@@ -7,7 +7,7 @@ use super::{AclServiceIdentity, ConsulAcl, Policy};
 use crate::{Client, ConsulResult};
 
 /// Request payload for the [AclTokens::create_token] method.
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct CreateToken {
     /// Specifies a UUID to use as the token's Accessor ID. If not specified a
@@ -39,7 +39,7 @@ pub struct CreateToken {
 ///
 /// Node identities are configuration blocks that you can add to role
 /// configurations or specify when linking tokens to policies.
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct NodeIdentity {
     /// The name of the node.
@@ -48,7 +48,7 @@ pub struct NodeIdentity {
     pub datacenter: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct RoleLink {
     #[serde(rename = "ID")]
