@@ -5,8 +5,10 @@ use serde::Deserialize;
 
 use crate::{Client, ConsulResult};
 
+mod policy;
 mod token;
 
+pub use policy::*;
 pub use token::*;
 
 /// An access control list.
