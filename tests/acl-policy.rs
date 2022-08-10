@@ -20,11 +20,11 @@ async fn test_create_acl_policy() {
         .expect("failed to create policy");
 
     // check policy exists
-    let policies = client.list_policies().await.expect("failed to list policies");
-    assert_eq!(policies.len(), 1);
+    let policies = client.read_policy(&policy.id).await.expect("failed to list policies");
+    assert!(policies.is_some());
 
     // delete policy
-    let result = client.delete_policy(policy.id).await.expect("failed to delete policy");
+    let result = client.delete_policy(&policy.id).await.expect("failed to delete policy");
     assert!(result);
 
     // check policy no longer exists
