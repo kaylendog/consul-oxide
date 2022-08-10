@@ -62,6 +62,7 @@ use reqwest::{Client as HttpClient, ClientBuilder};
 mod common;
 mod request;
 
+mod acl;
 #[cfg(feature = "agent")]
 mod agent;
 #[cfg(feature = "catalog")]
