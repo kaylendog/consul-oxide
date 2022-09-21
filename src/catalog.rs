@@ -134,7 +134,7 @@ pub trait Catalog: Sealed {
     /// perform anti-entropy.
     ///
     /// For more information, see the [API documentation](https://www.consul.io/api-docs/catalog#register-entity).
-    async fn register(
+    async fn register_entity(
         &self,
         reg: CatalogRegistrationPayload,
         q: Option<QueryOptions>,
@@ -146,7 +146,7 @@ pub trait Catalog: Sealed {
     /// perform anti-entropy.
     ///
     /// For more information, see the [API documentation](https://www.consul.io/api/catalog.html#deregister-entity).
-    async fn deregister(
+    async fn deregister_entity(
         &self,
         payload: CatalogDeregistrationPayload,
         options: Option<QueryOptions>,
@@ -162,15 +162,13 @@ pub trait Catalog: Sealed {
     /// This endpoint and returns the nodes registered in a given datacenter.
     ///
     /// For more information, see the [API documentation](https://www.consul.io/api/catalog.html#list-nodes).
-    async fn list_datacenter_nodes(
-        &self,
-        q: Option<QueryOptions>,
-    ) -> ConsulResult<HashMap<String, Vec<Node>>>;
+    async fn list_nodes(&self, q: Option<QueryOptions>)
+        -> ConsulResult<HashMap<String, Vec<Node>>>;
 
     /// This endpoint returns the services registered in a given datacenter.
     ///
     /// For more information, see the [API documentation](https://www.consul.io/api-docs/catalog#list-services).
-    async fn list_datacenter_services(
+    async fn list_services(
         &self,
         q: Option<QueryOptions>,
     ) -> ConsulResult<HashMap<String, Vec<String>>>;
@@ -179,7 +177,7 @@ pub trait Catalog: Sealed {
 #[async_trait]
 impl Catalog for Client {
     #[tracing::instrument]
-    async fn register(
+    async fn register_entity(
         &self,
         payload: CatalogRegistrationPayload,
         options: Option<QueryOptions>,
@@ -188,7 +186,7 @@ impl Catalog for Client {
     }
 
     #[tracing::instrument]
-    async fn deregister(
+    async fn deregister_entity(
         &self,
         payload: CatalogDeregistrationPayload,
         options: Option<QueryOptions>,
@@ -202,7 +200,7 @@ impl Catalog for Client {
     }
 
     #[tracing::instrument]
-    async fn list_datacenter_nodes(
+    async fn list_nodes(
         &self,
         q: Option<QueryOptions>,
     ) -> ConsulResult<HashMap<String, Vec<Node>>> {
@@ -210,7 +208,7 @@ impl Catalog for Client {
     }
 
     #[tracing::instrument]
-    async fn list_datacenter_services(
+    async fn list_services(
         &self,
         options: Option<QueryOptions>,
     ) -> ConsulResult<HashMap<String, Vec<String>>> {
@@ -231,10 +229,10 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_list_datacenter_services() {
+    async fn test_list_services() {
         let config = Config::default();
         let client = Client::new(config);
-        let r = client.list_datacenter_services(None).await.unwrap();
+        let r = client.list_services(None).await.unwrap();
         assert_ne!(r.len(), 0);
         match r.get("consul") {
             None => panic!("Should have a Consul service"),
