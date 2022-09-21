@@ -17,21 +17,24 @@ use crate::{sealed::Sealed, Client, ConsulResult, HealthCheck, ServiceWeights, T
 pub struct Service {
     /// Identifies the service as a Connect proxy. See Connect
     /// for details.
-    pub kind: String,
+    pub kind: Option<String>,
     /// Specifies the service ID. If this was not specified
     /// when the service was created, the value of the name field will be
     /// used.
     #[serde(rename = "ID")]
     pub id: String,
-    /// List of string values that used to add service-level labels.
-    pub tags: Option<Vec<String>>,
+    /// List of string values that used to add service-level labels.\
+    #[serde(default)]
+    pub tags: Vec<String>,
     /// Object that defines a map of the max 64 key/value pairs.
     /// The meta object has the same limitations as the node meta object in the
     /// node definition.
-    pub meta: Option<HashMap<String, String>>,
+    #[serde(default)]
+    pub meta: HashMap<String, String>,
     /// String value that specifies a service-specific IP address or hostname.
     pub address: String,
     /// Additional addresses defined for the service.
+    #[serde(default)]
     pub tagged_addresses: HashMap<String, TaggedAddress>,
     /// Specifies a service-specific port number.
     pub port: u16,
@@ -162,7 +165,11 @@ pub trait AgentServices: Sealed {
 impl AgentServices for Client {
     #[tracing::instrument]
     async fn list_local_services(&self) -> ConsulResult<Vec<Service>> {
-        self.get("/v1/agent/services", None).await
+        let services: HashMap<String, Service> = match self.get("/v1/agent/services", None).await {
+            Ok(services) => services,
+            Err(e) => return Err(e),
+        };
+        Ok(services.into_values().collect())
     }
 
     #[tracing::instrument]
@@ -191,6 +198,8 @@ impl AgentServices for Client {
 
     #[tracing::instrument]
     async fn register_service(&self, payload: ServiceRegistrationPayload) -> ConsulResult<()> {
-        self.put("/v1/agent/service/register", payload, None, None).await
+        self.put_with_empty("/v1/agent/service/register", payload, None, None)
+            .await
+            .map(|_: Option<()>| ())
     }
 }
