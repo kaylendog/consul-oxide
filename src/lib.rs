@@ -62,6 +62,9 @@ use reqwest::{Client as HttpClient, ClientBuilder};
 mod common;
 mod request;
 
+pub use common::*;
+
+#[cfg(feature = "acl")]
 mod acl;
 #[cfg(feature = "agent")]
 mod agent;
@@ -76,11 +79,12 @@ mod kv;
 #[cfg(feature = "session")]
 mod session;
 
+#[cfg(feature = "acl")]
+pub use acl::*;
 #[cfg(feature = "agent")]
 pub use agent::*;
 #[cfg(feature = "catalog")]
 pub use catalog::*;
-pub use common::*;
 #[cfg(feature = "connect")]
 pub use connect::*;
 #[cfg(feature = "health")]

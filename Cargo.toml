@@ -13,6 +13,7 @@ readme = "README.md"
 keywords = ["consul", "discovery"]
 
 [features]
+acl = []
 agent = []
 connect = []
 catalog = []
@@ -20,7 +21,7 @@ health = []
 kv = []
 session = []
 
-default = ["agent", "connect", "catalog", "health", "kv", "session"]
+default = ["acl", "agent", "connect", "catalog", "health", "kv", "session"]
 
 
 [dependencies]

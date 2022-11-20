@@ -53,13 +53,18 @@ jobs:
         uses: reviewdog/action-actionlint@v1
         with:
           reporter: github-pr-review
+          filter_mode: diff_context
       - name: Run reviewdog misspell
         uses: reviewdog/action-misspell@v1
         with:
           reporter: github-pr-review
+          filter_mode: diff_context
       - name: Run reviewdog yamllint
         uses: reviewdog/action-yamllint@v1
         with:
           reporter: github-pr-review
+          filter_mode: diff_context
       - name: Run reviewdog cargo-check and clippy
-        run: reviewdog -diff="git diff FETCH_HEAD"
+        run: reviewdog -diff="git diff FETCH_HEAD" -reporter=github-pr-review
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
