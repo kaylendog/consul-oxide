@@ -1,0 +1,65 @@
+name: Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  fmt:
+    name: Run rustfmt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+          override: true
+      - name: Install rustfmt toolchain component
+        run: rustup component add rustfmt
+      - name: Set up environment cache
+        uses: Swatinem/rust-cache@v2
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+  reviewdog:
+    name: Run reviewdog checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Set up environment cache
+        uses: Swatinem/rust-cache@v2
+      - name: Setup reviewdog
+        uses: reviewdog/action-setup@v1
+      - name: Run reviewdog actionlint
+        uses: reviewdog/action-actionlint@v1
+        with:
+          reporter: github-pr-review
+      - name: Run reviewdog misspell
+        uses: reviewdog/action-misspell@v1
+        with:
+          reporter: github-pr-review
+      - name: Run reviewdog yamllint
+        uses: reviewdog/action-yamllint@v1
+        with:
+          reporter: github-pr-review
+      - name: Run reviewdog cargo-check and clippy
+        run: reviewdog -diff="git diff FETCH_HEAD"
